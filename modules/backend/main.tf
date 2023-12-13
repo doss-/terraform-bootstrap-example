@@ -1,21 +1,20 @@
 # KMS Key
 
-resource "aws_kms_key" "tf_enc_key" {
+# resource "aws_kms_key" "tf_enc_key" {
 
-  description             = "Global Terraform state encryption key"
-  deletion_window_in_days = 30
+#   description             = "Global Terraform state encryption key"
+#   deletion_window_in_days = 30
 
-  tags = {
-    Origin = "Terraform"
-  }
-}
+#   tags = {
+#     Origin = "Terraform"
+#   }
+# }
 
 # S3 Bucket
 
 resource "aws_s3_bucket" "terraform_state" {
 
   bucket = var.bucket
-  acl    = "private"
 
   versioning {
     enabled = true
@@ -33,7 +32,6 @@ resource "aws_s3_bucket" "terraform_state" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.tf_enc_key.arn
         sse_algorithm     = "aws:kms"
       }
     }

@@ -3,14 +3,21 @@
 #
 # this script is used for bootstraping the project base infrastructure
 #
+  
+echo -e "DON'T FORGET TO UPDATE backend.tfvars with: \n \
+AWS_PROFILE \n \
+BUCKET NAME \n \
+REGION"
+exit 1
 
-# Base Workspace
-terraform workspace new base setup
-terraform workspace select base setup
+if [ -n "$1" ] && [ ! -d $1 ]; then
+  target_dir="../../${1}"
+fi
 
 # create base infra
-terraform init -backend-config=backend.tfvars setup
-terraform apply -var-file=backend.tfvars setup
+terraform -chdir=setup init 
+terraform -chdir=setup apply -var-file=../backend.tfvars
 
-# migrate local state to the remote with the s3 bucket and dynamodb table
-terraform init -backend-config=backend.tfvars base
+if [ -n "$1" ]; then
+  cp result-* ${target_dir}
+fi

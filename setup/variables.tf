@@ -1,6 +1,6 @@
 locals {
   operators = [
-    # Put any local operator IAM user names here
+    "my-terraform"
   ]
 }
 
